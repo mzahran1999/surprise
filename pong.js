@@ -113,6 +113,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Game loop
+    // Game loop11212
     setInterval(update, 1000 / 60); // 60 frames per second
 });
