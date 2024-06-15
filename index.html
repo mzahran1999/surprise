@@ -3,42 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surprise Games!</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Snake & Pong Game</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Welcome to Your Surprise Games!</h1>
-        </header>
-        <main>
-            <!-- Snake Game Section -->
-            <section id="snake-game">
-                <h2>Snake Game</h2>
-                <canvas id="snakeCanvas" width="400" height="400"></canvas>
-                <button id="startSnakeGame">Start Snake Game</button>
-            </section>
-
-            <!-- Pong Game Section -->
-            <section id="pong-game" style="display: none;">
-                <h2>Pong Game</h2>
-                <canvas id="pongCanvas" width="400" height="400"></canvas>
-                <p id="pongScore">Score: 0</p>
-                <button id="startPongGame">Start Pong Game</button>
-            </section>
-
-            <!-- Message Section -->
-            <section id="message" style="display: none;">
-                <h2>Will you go to the DPR Ian concert with me? &lt;3</h2>
-                <p>Congratulations! You've unlocked the surprise.</p>
-                <p>
-                    <a href="link_to_ticket" class="ticket-link">Click here to claim your tickets!</a>
-                </p>
-            </section>
-        </main>
+    <div id="snake-game">
+        <canvas id="snakeCanvas" width="400" height="400"></canvas>
+        <button id="startSnakeGame">Start Snake Game</button>
+        <button id="resetSnakeGame" style="display: none;">Restart Snake Game</button>
+    </div>
+    <div id="pong-game" style="display: none;">
+        <canvas id="pongCanvas" width="600" height="400"></canvas>
+    </div>
+    <div id="message" style="display: none;">
+        <p>Will you go to the DPR Ian concert with me? &lt;3</p>
     </div>
 
     <script src="snake.js"></script>
     <script src="pong.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
