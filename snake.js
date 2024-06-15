@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let snakeInterval;
     let snakeGameOver = true;
     let foodEaten = 0; // Track number of food eaten
+    let snakeAttempts = 0; // Track number of attempts
 
     // Start the Snake game
     startSnakeGameButton.addEventListener('click', startSnakeGame);
@@ -32,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         dy = 0;
         snakeGameOver = false;
         foodEaten = 0; // Reset food eaten count
+        snakeAttempts++; // Increment attempt count
 
         if (snakeInterval) {
             clearInterval(snakeInterval);
@@ -76,6 +78,9 @@ document.addEventListener('DOMContentLoaded', function() {
             clearInterval(snakeInterval);
             snakeGameOver = true;
             resetSnakeGameButton.style.display = 'inline'; // Show reset button
+            if (snakeAttempts === 5) {
+                startPongGame(); // Start Pong game after 5 attempts
+            }
             return;
         }
 
@@ -137,4 +142,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const collision = snake.some(segment => segment.x === head.x && segment.y === head.y);
         return collision || (head.x < 0 || head.x >= canvasWidth || head.y < 0 || head.y >= canvasHeight);
     }
-});
+
+    // Start Pong game
+    function startPongGame() {
+        // Replace the canvas content with Pong game content
+        snakeCanvas.style.display = 'none'; // Hide Snake game canvas
+        resetSnakeGameButton.style.display = 'none'; // Hide reset button
+
+        const pongContainer = document.createElement('div');
+        pongContainer.innerHTML = `
+            <h2>Now, let's play Pong!</h2>
+            <p>Score 5 times to reveal the surprise message.</p>
+            <canvas id="pongCanvas" width="600" height="400"></canvas>
+        `;
+        document.body.appendChild(pongContainer);
+
+        const pongCanvas = document.getElementById('pongCanvas');
+        const pongCtx = pongCanvas.getContext('2d');
