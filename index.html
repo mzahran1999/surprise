@@ -3,19 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surprise Snake Game!</title>
+    <title>Surprise Games!</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Welcome to Your Surprise Snake Game!</h1>
+            <h1>Welcome to Your Surprise Games!</h1>
         </header>
         <main>
-            <section id="game">
-                <canvas id="gameCanvas" width="400" height="400"></canvas>
-                <button id="startGame">Start Game</button>
+            <!-- Snake Game Section -->
+            <section id="snake-game">
+                <h2>Snake Game</h2>
+                <canvas id="snakeCanvas" width="400" height="400"></canvas>
+                <button id="startSnakeGame">Start Snake Game</button>
             </section>
+
+            <!-- Pong Game Section -->
+            <section id="pong-game" style="display: none;">
+                <h2>Pong Game</h2>
+                <canvas id="pongCanvas" width="400" height="400"></canvas>
+                <p id="pongScore">Score: 0</p>
+                <button id="startPongGame">Start Pong Game</button>
+            </section>
+
+            <!-- Message Section -->
             <section id="message" style="display: none;">
                 <h2>Will you go to the DPR Ian concert with me? &lt;3</h2>
                 <p>Congratulations! You've unlocked the surprise.</p>
@@ -26,6 +38,7 @@
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <script src="snake.js"></script>
+    <script src="pong.js"></script>
 </body>
 </html>
