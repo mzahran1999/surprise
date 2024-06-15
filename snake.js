@@ -84,6 +84,10 @@ document.addEventListener('DOMContentLoaded', function() {
         snakeCtx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawSnake();
         drawSnakeFood();
+
+        // Draw borders around canvas
+        snakeCtx.strokeStyle = '#ddd'; // Border color
+        snakeCtx.strokeRect(0, 0, canvasWidth, canvasHeight);
     }
 
     // Draw snake on canvas for Snake game
@@ -91,8 +95,6 @@ document.addEventListener('DOMContentLoaded', function() {
         snake.forEach((segment, index) => {
             snakeCtx.fillStyle = index === 0 ? '#007bff' : '#1a73e8'; // Head and body color
             snakeCtx.fillRect(segment.x, segment.y, tileSize, tileSize);
-            snakeCtx.strokeStyle = '#fff'; // Border color
-            snakeCtx.strokeRect(segment.x, segment.y, tileSize, tileSize);
         });
     }
 
