@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const startPongGameButton = document.getElementById('startPongGame');
-    const pongGameSection = document.getElementById('pong-game');
     const pongCanvas = document.getElementById('pongCanvas');
     const pongCtx = pongCanvas.getContext('2d');
 
@@ -18,17 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let pongGameOver = true;
 
     // Start the Pong game
-    startPongGameButton.addEventListener('click', startPongGame);
-
     function startPongGame() {
-        paddle1Y = (pongCanvas.height - paddleHeight) / 2;
-        paddle2Y = (pongCanvas.height - paddleHeight) / 2;
-        ballX = pongCanvas.width / 2;
-        ballY = pongCanvas.height / 2;
-        ballSpeedX = 5;
-        ballSpeedY = 5;
-        player1Score = 0;
-        player2Score = 0;
+        pongCanvas.style.display = 'block'; // Show pong canvas
         pongGameOver = false;
 
         if (!pongGameOver) {
@@ -63,8 +52,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Check game over condition
         if (player1Score === 5 || player2Score === 5) {
             pongGameOver = true;
-            pongGameSection.style.display = 'none';
-            messageSection.style.display = 'block';
+            pongCanvas.style.display = 'none'; // Hide pong canvas
+            showFinalMessage(); // Show final message after both games are completed
         } else {
             requestAnimationFrame(drawPong);
         }
@@ -130,4 +119,13 @@ document.addEventListener('DOMContentLoaded', function() {
         ballY = pongCanvas.height / 2;
         ballSpeedX = -ballSpeedX; // Serve ball towards the player who scored
     }
+
+    // Function to show final message
+    function showFinalMessage() {
+        const messageSection = document.getElementById('message');
+        messageSection.style.display = 'block';
+    }
+
+    // Start Pong game after Snake game completion
+    window.startPongGame = startPongGame; // Expose startPongGame function globally
 });
