@@ -5,24 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surprise Website</title>
     <style>
-        /* Add your CSS styles here */
-        canvas {
-            border: 1px solid #ccc; /* Optional: Add border around canvas */
-            display: block;
-            margin: 20px auto;
-        }
         body {
+            font-family: Arial, sans-serif;
             text-align: center;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+        button {
+            font-size: 18px;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to the Surprise!</h1>
-    <p>Click the button below to start the Snake game!</p>
+    <h1>Welcome to the Surprise Website!</h1>
+    <p>Click the button below to start the Snake game:</p>
     <button id="startSnakeGame">Start Snake Game</button>
-    <canvas id="snakeCanvas" width="400" height="400"></canvas>
-    <br>
-    <button id="resetSnakeGame" style="display: none;">Restart Snake Game</button>
+    <button id="resetSnakeGame" style="display: none;">Reset Snake Game</button>
+    <canvas id="snakeCanvas" width="600" height="400"></canvas>
 
     <script src="snake.js"></script>
 </body>
