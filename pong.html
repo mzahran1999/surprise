@@ -97,7 +97,7 @@
             if (player1Score >= winningScore || player2Score >= winningScore) {
                 gameOver = true;
                 setTimeout(() => {
-                    window.location.href = 'message.html'; // Redirect to message page after game
+                    window.location.href = 'airhockey.html'; // Redirect to message page after game
                 }, 1000); // Delay before redirecting
             } else {
                 requestAnimationFrame(drawPongGame);
