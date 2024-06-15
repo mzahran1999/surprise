@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        canvas {
+            display: block;
+            margin: auto;
+            margin-top: 50px;
+            border: 1px solid #000;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="pongCanvas" width="800" height="400"></canvas>
+    <script>
+        // Pong game logic here
+        const pongCanvas = document.getElementById('pongCanvas');
+        const pongCtx = pongCanvas.getContext('2d');
+
+        let ballX = pongCanvas.width / 2;
+        let ballY = pongCanvas.height / 2;
+        let ballSpeedX = 5;
+        let ballSpeedY = 5;
+        let player1Y = pongCanvas.height / 2 - 50;
+        let player2Y = pongCanvas.height / 2 - 50;
+        let playerHeight = 100;
+        let playerWidth = 10;
+        let playerSpeed = 10;
+        let player1Score = 0;
+        let player2Score = 0;
+        const winningScore = 5;
+        let gameOver = false;
+
+        function drawPongGame() {
+            if (gameOver) return;
+
+            // Clear canvas
+            pongCtx.clearRect(0, 0, pongCanvas.width, pongCanvas.height);
+
+            // Draw ball
+            pongCtx.fillStyle = 'black';
+            pongCtx.beginPath();
+            pongCtx.arc(ballX, ballY, 10, 0, Math.PI * 2);
+            pongCtx.fill();
+
+            // Draw paddles
+            pongCtx.fillStyle = 'black';
+            pongCtx.fillRect(10, player1Y, playerWidth, playerHeight);
+            pongCtx.fillRect(pongCanvas.width - 20, player2Y, playerWidth, playerHeight);
+
+            // Move ball
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+
+            // AI movement (simple)
+            let player2YCenter = player2Y + playerHeight / 2;
+            if (player2YCenter < ballY - 35) {
+                player2Y += playerSpeed;
+            } else if (player2YCenter > ballY + 35) {
+                player2Y -= playerSpeed;
+            }
+
+            // Ball collision with top/bottom walls
+            if (ballY < 0 || ballY > pongCanvas.height) {
+                ballSpeedY = -ballSpeedY;
+            }
+
+            // Ball collision with paddles
+            if (ballX <= 20 + playerWidth && ballY > player1Y && ballY < player1Y + playerHeight) {
+                ballSpeedX = -ballSpeedX;
+            } else if (ballX >= pongCanvas.width - 30 && ballY > player2Y && ballY < player2Y + playerHeight) {
+                ballSpeedX = -ballSpeedX;
+            }
+
+            // Score update
+            if (ballX > pongCanvas.width) {
+                player1Score++;
+                resetBall();
+            } else if (ballX < 0) {
+                player2Score++;
+                resetBall();
+            }
+
+            // Draw scores
+            pongCtx.fillText(`Player 1: ${player1Score}`, 100, 100);
+            pongCtx.fillText(`Player 2: ${player2Score}`, pongCanvas.width - 200, 100);
+
+            // Check for game over
+            if (player1Score >= winningScore || player2Score >= winningScore) {
+                gameOver = true;
+                setTimeout(() => {
+                    window.location.href = 'message.html'; // Redirect to message page after game
+                }, 1000); // Delay before redirecting
+            } else {
+                requestAnimationFrame(drawPongGame);
+            }
+        }
+
+        function resetBall() {
+            ballX = pongCanvas.width / 2;
+            ballY = pongCanvas.height / 2;
+            ballSpeedX = -ballSpeedX; // Change direction of the ball after scoring
+        }
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'w' && player1Y > 0) {
+                player1Y -= playerSpeed;
+            } else if (event.key === 's' && player1Y < pongCanvas.height - playerHeight) {
+                player1Y += playerSpeed;
+            }
+        });
+
+        drawPongGame();
+    </script>
+</body>
+</html>
