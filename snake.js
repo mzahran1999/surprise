@@ -1,16 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
     const startSnakeGameButton = document.getElementById('startSnakeGame');
-    const snakeGameSection = document.getElementById('snake-game');
     const snakeCanvas = document.getElementById('snakeCanvas');
     const snakeCtx = snakeCanvas.getContext('2d');
 
     const tileSize = 20;
     const initialSnakeLength = 3; // Initial length of the snake
-    let snake;
+    let snake = [];
     let food;
-    let snakeInterval;
     let dx = tileSize;
     let dy = 0;
+    let snakeInterval;
     let snakeGameOver = true;
 
     // Start the Snake game
@@ -74,8 +73,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (head.x < 0 || head.x >= snakeCanvas.width || head.y < 0 || head.y >= snakeCanvas.height || checkSnakeCollision()) {
             clearInterval(snakeInterval);
             snakeGameOver = true;
-            snakeGameSection.style.display = 'none';
-            messageSection.style.display = 'block';
+            snakeCanvas.style.display = 'none'; // Hide snake canvas
+            startPongGame(); // Start Pong game after Snake game
         }
 
         // Clear canvas and draw snake & food
@@ -100,12 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
             x: Math.floor(Math.random() * (maxX / tileSize)) * tileSize,
             y: Math.floor(Math.random() * (maxY / tileSize)) * tileSize
         };
-    }
-
-    // Draw food on canvas for Snake game
-    function drawSnakeFood() {
-        snakeCtx.fillStyle = '#28a745';
-        snakeCtx.fillRect(food.x, food.y, tileSize, tileSize);
     }
 
     // Check if snake collides with itself for Snake game
