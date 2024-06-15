@@ -159,3 +159,115 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const pongCanvas = document.getElementById('pongCanvas');
         const pongCtx = pongCanvas.getContext('2d');
+
+        let leftPaddleY = pongCanvas.height / 2 - 50;
+        let rightPaddleY = pongCanvas.height / 2 - 50;
+        let ballX = pongCanvas.width / 2;
+        let ballY = pongCanvas.height / 2;
+        let ballSpeedX = 5;
+        let ballSpeedY = 5;
+        let leftPlayerScore = 0;
+        let rightPlayerScore = 0;
+        const winningScore = 5;
+
+        function drawPaddle(x, y) {
+            pongCtx.fillStyle = '#fff';
+            pongCtx.fillRect(x, y, 10, 100);
+        }
+
+        function drawBall() {
+            pongCtx.fillStyle = '#fff';
+            pongCtx.beginPath();
+            pongCtx.arc(ballX, ballY, 10, 0, Math.PI * 2, false);
+            pongCtx.fill();
+        }
+
+        function drawScores() {
+            pongCtx.fillStyle = '#fff';
+            pongCtx.font = '30px Arial';
+            pongCtx.fillText(leftPlayerScore, 100, 50);
+            pongCtx.fillText(rightPlayerScore, pongCanvas.width - 100, 50);
+        }
+
+        function moveBall() {
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+
+            // Ball collision with top and bottom walls
+            if (ballY - 10 < 0 || ballY + 10 > pongCanvas.height) {
+                ballSpeedY = -ballSpeedY;
+            }
+
+            // Ball collision with paddles
+            if (ballX - 10 < 10 && ballY > leftPaddleY && ballY < leftPaddleY + 100) {
+                ballSpeedX = -ballSpeedX;
+            }
+            if (ballX + 10 > pongCanvas.width - 10 && ballY > rightPaddleY && ballY < rightPaddleY + 100) {
+                ballSpeedX = -ballSpeedX;
+            }
+
+            // Scoring
+            if (ballX + 10 > pongCanvas.width) {
+                leftPlayerScore++;
+                resetBall();
+            }
+            if (ballX - 10 < 0) {
+                rightPlayerScore++;
+                resetBall();
+            }
+
+            // Check winning condition
+            if (leftPlayerScore >= winningScore || rightPlayerScore >= winningScore) {
+                showEndMessage();
+            }
+        }
+
+        function resetBall() {
+            ballX = pongCanvas.width / 2;
+            ballY = pongCanvas.height / 2;
+            ballSpeedX = -ballSpeedX;
+        }
+
+        function showEndMessage() {
+            pongCtx.clearRect(0, 0, pongCanvas.width, pongCanvas.height);
+            pongCtx.fillStyle = '#fff';
+            pongCtx.font = '30px Arial';
+            pongCtx.fillText('Game Over!', pongCanvas.width / 2 - 100, pongCanvas.height / 2 - 30);
+            pongCtx.fillText('Refresh to play again.', pongCanvas.width / 2 - 150, pongCanvas.height / 2 + 30);
+            // Display your surprise message here
+            pongCtx.fillText('Will you go to the DPR Ian concert with me? <3', pongCanvas.width / 2 - 250, pongCanvas.height / 2 + 90);
+        }
+
+        function draw() {
+            pongCtx.clearRect(0, 0, pongCanvas.width, pongCanvas.height);
+            drawPaddle(0, leftPaddleY);
+            drawPaddle(pongCanvas.width - 10, rightPaddleY);
+            drawBall();
+            drawScores();
+        }
+
+        function update() {
+            moveBall();
+            draw();
+        }
+
+        // Keyboard controls for paddles
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'w' && leftPaddleY > 0) {
+                leftPaddleY -= 20;
+            }
+            if (e.key === 's' && leftPaddleY < pongCanvas.height - 100) {
+                leftPaddleY += 20;
+            }
+            if (e.key === 'ArrowUp' && rightPaddleY > 0) {
+                rightPaddleY -= 20;
+            }
+            if (e.key === 'ArrowDown' && rightPaddleY < pongCanvas.height - 100) {
+                rightPaddleY += 20;
+            }
+        });
+
+        // Game loop
+        setInterval(update, 1000 / 60); // 60 frames per second
+    }
+});
