@@ -2,130 +2,117 @@ document.addEventListener('DOMContentLoaded', function() {
     const pongCanvas = document.getElementById('pongCanvas');
     const pongCtx = pongCanvas.getContext('2d');
 
+    const canvasWidth = pongCanvas.width;
+    const canvasHeight = pongCanvas.height;
     const paddleWidth = 10;
-    const paddleHeight = 70;
+    const paddleHeight = 100;
+    const paddleSpeed = 5;
+    let leftPaddleY = canvasHeight / 2 - paddleHeight / 2;
+    let rightPaddleY = canvasHeight / 2 - paddleHeight / 2;
     const ballSize = 10;
-    let paddle1Y = (pongCanvas.height - paddleHeight) / 2;
-    let paddle2Y = (pongCanvas.height - paddleHeight) / 2;
-    let ballX = pongCanvas.width / 2;
-    let ballY = pongCanvas.height / 2;
+    let ballX = canvasWidth / 2;
+    let ballY = canvasHeight / 2;
     let ballSpeedX = 5;
     let ballSpeedY = 5;
-    let player1Score = 0;
-    let player2Score = 0;
-    let pongGameOver = true;
+    let leftPlayerScore = 0;
+    let rightPlayerScore = 0;
+    const winningScore = 5;
 
-    // Start the Pong game
-    function startPongGame() {
-        pongCanvas.style.display = 'block'; // Show pong canvas
-        pongGameOver = false;
-
-        if (!pongGameOver) {
-            requestAnimationFrame(drawPong);
-        }
+    function drawPaddle(x, y) {
+        pongCtx.fillStyle = '#fff';
+        pongCtx.fillRect(x, y, paddleWidth, paddleHeight);
     }
 
-    // Handle keyboard controls for Pong game
-    document.addEventListener('keydown', movePaddle);
-
-    function movePaddle(e) {
-        if (pongGameOver) return;
-
-        if (e.key === 'w' && paddle1Y > 0) {
-            paddle1Y -= 10;
-        }
-        if (e.key === 's' && paddle1Y < pongCanvas.height - paddleHeight) {
-            paddle1Y += 10;
-        }
-    }
-
-    // Main loop for Pong game
-    function drawPong() {
-        if (pongGameOver) return;
-
-        pongCtx.clearRect(0, 0, pongCanvas.width, pongCanvas.height);
-        drawPaddles();
-        drawBall();
-        moveBall();
-        drawScores();
-
-        // Check game over condition
-        if (player1Score === 5 || player2Score === 5) {
-            pongGameOver = true;
-            pongCanvas.style.display = 'none'; // Hide pong canvas
-            showFinalMessage(); // Show final message after both games are completed
-        } else {
-            requestAnimationFrame(drawPong);
-        }
-    }
-
-    // Draw paddles on canvas for Pong game
-    function drawPaddles() {
-        pongCtx.fillStyle = '#007bff';
-        pongCtx.fillRect(10, paddle1Y, paddleWidth, paddleHeight);
-        pongCtx.fillStyle = '#28a745';
-        pongCtx.fillRect(pongCanvas.width - paddleWidth - 10, paddle2Y, paddleWidth, paddleHeight);
-    }
-
-    // Draw ball on canvas for Pong game
-    function drawBall() {
-        pongCtx.fillStyle = '#dc3545';
+    function drawBall(x, y) {
+        pongCtx.fillStyle = '#fff';
         pongCtx.beginPath();
-        pongCtx.arc(ballX, ballY, ballSize, 0, Math.PI * 2);
+        pongCtx.arc(x, y, ballSize, 0, Math.PI * 2);
         pongCtx.fill();
     }
 
-    // Move ball for Pong game
+    function drawScores() {
+        pongCtx.fillStyle = '#fff';
+        pongCtx.font = '30px Arial';
+        pongCtx.fillText(leftPlayerScore, 100, 50);
+        pongCtx.fillText(rightPlayerScore, canvasWidth - 100, 50);
+    }
+
     function moveBall() {
         ballX += ballSpeedX;
         ballY += ballSpeedY;
 
-        // Ball collision with top/bottom walls
-        if (ballY + ballSize >= pongCanvas.height || ballY - ballSize <= 0) {
+        // Check collision with top and bottom walls
+        if (ballY + ballSize > canvasHeight || ballY - ballSize < 0) {
             ballSpeedY = -ballSpeedY;
         }
 
-        // Ball collision with paddles
-        if (ballX - ballSize <= paddleWidth && ballY >= paddle1Y && ballY <= paddle1Y + paddleHeight) {
+        // Check collision with paddles
+        if (ballX - ballSize < paddleWidth && ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
             ballSpeedX = -ballSpeedX;
         }
-        if (ballX + ballSize >= pongCanvas.width - paddleWidth && ballY >= paddle2Y && ballY <= paddle2Y + paddleHeight) {
+        if (ballX + ballSize > canvasWidth - paddleWidth && ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
             ballSpeedX = -ballSpeedX;
         }
 
-        // Ball goes past paddles
-        if (ballX - ballSize <= 0) {
-            player2Score++;
+        // Check if ball goes out of bounds
+        if (ballX - ballSize < 0) {
+            rightPlayerScore++;
             resetBall();
         }
-        if (ballX + ballSize >= pongCanvas.width) {
-            player1Score++;
+        if (ballX + ballSize > canvasWidth) {
+            leftPlayerScore++;
             resetBall();
+        }
+
+        // Check winning condition
+        if (leftPlayerScore >= winningScore || rightPlayerScore >= winningScore) {
+            showEndMessage();
         }
     }
 
-    // Draw scores on canvas for Pong game
-    function drawScores() {
-        pongCtx.fillStyle = '#007bff';
-        pongCtx.font = '24px Arial';
-        pongCtx.fillText(`Player 1: ${player1Score}`, 50, 30);
-        pongCtx.fillStyle = '#28a745';
-        pongCtx.fillText(`Player 2: ${player2Score}`, pongCanvas.width - 150, 30);
-    }
-
-    // Reset ball position for Pong game
     function resetBall() {
-        ballX = pongCanvas.width / 2;
-        ballY = pongCanvas.height / 2;
-        ballSpeedX = -ballSpeedX; // Serve ball towards the player who scored
+        ballX = canvasWidth / 2;
+        ballY = canvasHeight / 2;
+        ballSpeedX = -ballSpeedX;
     }
 
-    // Function to show final message
-    function showFinalMessage() {
-        const messageSection = document.getElementById('message');
-        messageSection.style.display = 'block';
+    function showEndMessage() {
+        pongCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+        pongCtx.fillStyle = '#fff';
+        pongCtx.font = '30px Arial';
+        pongCtx.fillText('Game Over!', canvasWidth / 2 - 100, canvasHeight / 2 - 30);
+        pongCtx.fillText('Refresh to play again.', canvasWidth / 2 - 150, canvasHeight / 2 + 30);
     }
 
-    // Start Pong game after Snake game completion
-    window.startPongGame = startPongGame; // Expose startPongGame function globally
+    function draw() {
+        pongCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+        drawPaddle(0, leftPaddleY);
+        drawPaddle(canvasWidth - paddleWidth, rightPaddleY);
+        drawBall(ballX, ballY);
+        drawScores();
+    }
+
+    function update() {
+        moveBall();
+        draw();
+    }
+
+    // Keyboard controls for paddles
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'w' && leftPaddleY > 0) {
+            leftPaddleY -= paddleSpeed;
+        }
+        if (e.key === 's' && leftPaddleY < canvasHeight - paddleHeight) {
+            leftPaddleY += paddleSpeed;
+        }
+        if (e.key === 'ArrowUp' && rightPaddleY > 0) {
+            rightPaddleY -= paddleSpeed;
+        }
+        if (e.key === 'ArrowDown' && rightPaddleY < canvasHeight - paddleHeight) {
+            rightPaddleY += paddleSpeed;
+        }
+    });
+
+    // Game loop
+    setInterval(update, 1000 / 60); // 60 frames per second
 });
