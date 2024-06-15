@@ -250,4 +250,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Keyboard controls for paddles
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'w' &&
+            if (e.key === 'w' && leftPaddleY > 0) {
+                leftPaddleY -= 20;
+            } else if (e.key === 's' && leftPaddleY < pongCanvas.height - 100) {
+                leftPaddleY += 20;
+            }
+
+            if (e.key === 'ArrowUp' && rightPaddleY > 0) {
+                rightPaddleY -= 20;
+            } else if (e.key === 'ArrowDown' && rightPaddleY < pongCanvas.height - 100) {
+                rightPaddleY += 20;
+            }
+        });
+
+        setInterval(update, 1000 / 60); // Update game 60 times per second
+    }
+});
