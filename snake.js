@@ -145,19 +145,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Start Pong game
     function startPongGame() {
-        // Replace the canvas content with Pong game content
-        snakeCanvas.style.display = 'none'; // Hide Snake game canvas
-        resetSnakeGameButton.style.display = 'none'; // Hide reset button
+        // Clear Snake canvas and hide it
+        snakeCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+        snakeCanvas.style.display = 'none';
 
-        const pongContainer = document.createElement('div');
-        pongContainer.innerHTML = `
-            <h2>Now, let's play Pong!</h2>
-            <p>Score 5 times to reveal the surprise message.</p>
-            <canvas id="pongCanvas" width="600" height="400"></canvas>
-        `;
-        document.body.appendChild(pongContainer);
+        // Create Pong canvas
+        const pongCanvas = document.createElement('canvas');
+        pongCanvas.id = 'pongCanvas';
+        pongCanvas.width = 600;
+        pongCanvas.height = 400;
+        document.body.appendChild(pongCanvas);
 
-        const pongCanvas = document.getElementById('pongCanvas');
         const pongCtx = pongCanvas.getContext('2d');
 
         let leftPaddleY = pongCanvas.height / 2 - 50;
@@ -234,7 +232,6 @@ document.addEventListener('DOMContentLoaded', function() {
             pongCtx.font = '30px Arial';
             pongCtx.fillText('Game Over!', pongCanvas.width / 2 - 100, pongCanvas.height / 2 - 30);
             pongCtx.fillText('Refresh to play again.', pongCanvas.width / 2 - 150, pongCanvas.height / 2 + 30);
-            // Display your surprise message here
             pongCtx.fillText('Will you go to the DPR Ian concert with me? <3', pongCanvas.width / 2 - 250, pongCanvas.height / 2 + 90);
         }
 
@@ -253,21 +250,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Keyboard controls for paddles
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'w' && leftPaddleY > 0) {
-                leftPaddleY -= 20;
-            }
-            if (e.key === 's' && leftPaddleY < pongCanvas.height - 100) {
-                leftPaddleY += 20;
-            }
-            if (e.key === 'ArrowUp' && rightPaddleY > 0) {
-                rightPaddleY -= 20;
-            }
-            if (e.key === 'ArrowDown' && rightPaddleY < pongCanvas.height - 100) {
-                rightPaddleY += 20;
-            }
-        });
-
-        // Game loop
-        setInterval(update, 1000 / 60); // 60 frames per second
-    }
-});
+            if (e.key === 'w' &&
