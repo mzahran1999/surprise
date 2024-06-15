@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     resetSnakeGameButton.addEventListener('click', startSnakeGame);
 
     function startSnakeGame() {
+        console.log('Snake game started'); 
         snake = [];
         for (let i = 3; i >= 0; i--) {
             snake.push({ x: tileSize * i, y: 0 });
