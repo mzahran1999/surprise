@@ -123,6 +123,11 @@ document.addEventListener('DOMContentLoaded', function() {
             x: Math.floor(Math.random() * maxX) * tileSize,
             y: Math.floor(Math.random() * maxY) * tileSize
         };
+
+        // Ensure food does not spawn on the snake's body
+        if (snake.some(segment => segment.x === food.x && segment.y === food.y)) {
+            createSnakeFood(); // Recursively call function until food position is valid
+        }
     }
 
     // Draw food on canvas for Snake game
