@@ -3,26 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake & Pong Game</title>
+    <title>Surprise Concert Invitation</title>
     <style>
-        /* Add your CSS styles here */
+        /* Add any necessary CSS styles here */
+        canvas {
+            border: 1px solid #ddd; /* Optional: Add a border to the canvas */
+            display: block; /* Ensure canvas is block-level element */
+            margin: 0 auto; /* Center the canvas */
+        }
+        #surprise {
+            display: none; /* Hide surprise message by default */
+            font-size: 24px;
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <div id="snake-game">
-        <canvas id="snakeCanvas" width="400" height="400"></canvas>
-        <button id="startSnakeGame">Start Snake Game</button>
-        <button id="resetSnakeGame" style="display: none;">Restart Snake Game</button>
+    <h1>Welcome to the Surprise Concert Invitation!</h1>
+
+    <canvas id="snakeCanvas" width="400" height="400"></canvas>
+
+    <button id="startSnakeGame">Start Snake Game</button>
+    <button id="resetSnakeGame" style="display: none;">Reset Snake Game</button>
+
+    <div id="pongGame" style="display: none;">
+        <!-- Pong game content will go here -->
     </div>
-    <div id="pong-game" style="display: none;">
-        <canvas id="pongCanvas" width="600" height="400"></canvas>
-    </div>
-    <div id="message" style="display: none;">
-        <p>Will you go to the DPR Ian concert with me? &lt;3</p>
+
+    <div id="surprise">
+        <p>Will you go to the DPR Ian concert with me? ❤️</p>
     </div>
 
     <script src="snake.js"></script>
     <script src="pong.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // JavaScript code for handling the surprise message display
+        function displaySurpriseMessage() {
+            const surpriseDiv = document.getElementById('surprise');
+            surpriseDiv.style.display = 'block';
+        }
+    </script>
 </body>
 </html>
