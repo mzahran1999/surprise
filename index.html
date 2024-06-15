@@ -9,31 +9,23 @@
             font-family: Arial, sans-serif;
             text-align: center;
         }
-        canvas {
-            border: 1px solid #ccc;
-            margin-top: 20px;
+        .container {
+            margin-top: 100px;
         }
-        button {
-            font-size: 18px;
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
+        .container img {
             cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
+            margin: 20px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to the Surprise Website!</h1>
-    <p>Click the button below to start the Snake game:</p>
-    <button id="startSnakeGame">Start Snake Game</button>
-    <button id="resetSnakeGame" style="display: none;">Reset Snake Game</button>
-    <canvas id="snakeCanvas" width="600" height="400"></canvas>
-
-    <script src="snake.js"></script>
+    <div class="container">
+        <h1>Click on the heart to continue...</h1>
+        <a href="duck.html"><img src="heart.jpg" alt="Heart"></a>
+    </div>
 </body>
 </html>
