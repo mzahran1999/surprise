@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (snakeX === foodX && snakeY === foodY) {
             snakeFoodCount++;
             score++;
+            snakeSegments.push({ x: snakeX, y: snakeY }); // Grow snake
             spawnFood();
         } else {
             // Remove tail segment if no food eaten
@@ -86,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (snakeFoodCount < 10) {
             setTimeout(drawSnake, 100); // Adjust snake speed here (lower value for faster speed)
         } else {
-            displayMessage();
+            setTimeout(displayMessage, 500); // Display message after a delay
         }
     }
 
