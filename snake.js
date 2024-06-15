@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const tileSize = 20;
     const initialSnakeLength = 3; // Initial length of the snake
+    const canvasWidth = snakeCanvas.width;
+    const canvasHeight = snakeCanvas.height;
     let snake = [];
     let food;
     let dx = tileSize;
@@ -60,6 +62,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (snakeGameOver) return;
 
         const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+        // Check if snake hits wall
+        if (head.x < 0 || head.x >= canvasWidth || head.y < 0 || head.y >= canvasHeight || checkSnakeCollision(head)) {
+            clearInterval(snakeInterval);
+            snakeGameOver = true;
+            startPongGame(); // Start Pong game after Snake game
+            return;
+        }
+
         snake.unshift(head);
 
         // Check if snake eats food
@@ -69,16 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
             snake.pop();
         }
 
-        // Check if snake hits wall or itself
-        if (head.x < 0 || head.x >= snakeCanvas.width || head.y < 0 || head.y >= snakeCanvas.height || checkSnakeCollision()) {
-            clearInterval(snakeInterval);
-            snakeGameOver = true;
-            snakeCanvas.style.display = 'none'; // Hide snake canvas
-            startPongGame(); // Start Pong game after Snake game
-        }
-
         // Clear canvas and draw snake & food
-        snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+        snakeCtx.clearRect(0, 0, canvasWidth, canvasHeight);
         drawSnake();
         drawSnakeFood();
     }
@@ -88,22 +91,24 @@ document.addEventListener('DOMContentLoaded', function() {
         snake.forEach((segment, index) => {
             snakeCtx.fillStyle = index === 0 ? '#007bff' : '#1a73e8'; // Head and body color
             snakeCtx.fillRect(segment.x, segment.y, tileSize, tileSize);
+            snakeCtx.strokeStyle = '#fff'; // Border color
+            snakeCtx.strokeRect(segment.x, segment.y, tileSize, tileSize);
         });
     }
 
     // Create food at random position for Snake game
     function createSnakeFood() {
-        const maxX = snakeCanvas.width - tileSize;
-        const maxY = snakeCanvas.height - tileSize;
+        const maxX = canvasWidth - tileSize;
+        const maxY = canvasHeight - tileSize;
         food = {
             x: Math.floor(Math.random() * (maxX / tileSize)) * tileSize,
             y: Math.floor(Math.random() * (maxY / tileSize)) * tileSize
         };
     }
 
-    // Check if snake collides with itself for Snake game
-    function checkSnakeCollision() {
-        const [head, ...body] = snake;
-        return body.some(segment => segment.x === head.x && segment.y === head.y);
+    // Check if snake collides with itself or walls for Snake game
+    function checkSnakeCollision(head) {
+        const collision = snake.some(segment => segment.x === head.x && segment.y === head.y);
+        return collision || (head.x < 0 || head.x >= canvasWidth || head.y < 0 || head.y >= canvasHeight);
     }
 });
