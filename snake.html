@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        canvas {
+            display: block;
+            margin: auto;
+            margin-top: 50px;
+            border: 1px solid #000;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="snakeCanvas" width="400" height="400"></canvas>
+    <script>
+        // Snake game logic here
+        const snakeCanvas = document.getElementById('snakeCanvas');
+        const snakeCtx = snakeCanvas.getContext('2d');
+
+        const snakeSize = 20;
+        const foodSize = 10;
+        let snakeSegments = [{ x: 100, y: 100 }];
+        let foodX, foodY;
+        let snakeFoodCount = 0;
+        let score = 0;
+        let snakeSpeedX = snakeSize;
+        let snakeSpeedY = 0;
+        let gameRunning = true;
+
+        function startGame() {
+            drawSnake();
+            spawnFood();
+            document.addEventListener('keydown', changeDirection);
+        }
+
+        function drawSnake() {
+            if (!gameRunning) return;
+
+            snakeCtx.clearRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+
+            // Move the snake
+            const head = { x: snakeSegments[0].x + snakeSpeedX, y: snakeSegments[0].y + snakeSpeedY };
+            snakeSegments.unshift(head);
+
+            // Check if snake eats food
+            if (head.x === foodX && head.y === foodY) {
+                snakeFoodCount++;
+                score++;
+                spawnFood();
+            } else {
+                snakeSegments.pop(); // Remove the tail segment
+            }
+
+            // Check if snake hits wall or itself
+            if (head.x < 0 || head.x >= snakeCanvas.width || head.y < 0 || head.y >= snakeCanvas.height || checkCollision(head)) {
+                gameOver();
+                return;
+            }
+
+            // Draw snake
+            snakeSegments.forEach(segment => {
+                snakeCtx.fillStyle = 'green';
+                snakeCtx.fillRect(segment.x, segment.y, snakeSize, snakeSize);
+            });
+
+            // Draw food
+            snakeCtx.fillStyle = 'red';
+            snakeCtx.fillRect(foodX, foodY, foodSize, foodSize);
+
+            // Continue game loop
+            if (snakeFoodCount < 5) {
+                setTimeout(drawSnake, 100); // Adjust snake speed here (lower value for faster speed)
+            } else {
+                setTimeout(() => {
+                    gameRunning = false;
+                    window.location.href = 'message.html'; // Redirect to message page after game
+                }, 1000); // Delay before redirecting
+            }
+        }
+
+        function spawnFood() {
+            foodX = Math.floor(Math.random() * (snakeCanvas.width / snakeSize)) * snakeSize;
+            foodY = Math.floor(Math.random() * (snakeCanvas.height / snakeSize)) * snakeSize;
+        }
+
+        function changeDirection(event) {
+            if (!gameRunning) return;
+            // Prevent snake from reversing
+            if (event.key === 'ArrowUp' && snakeSpeedY === 0) {
+                snakeSpeedX = 0;
+                snakeSpeedY = -snakeSize;
+            } else if (event.key === 'ArrowDown' && snakeSpeedY === 0) {
+                snakeSpeedX = 0;
+                snakeSpeedY = snakeSize;
+            } else if (event.key === 'ArrowLeft' && snakeSpeedX === 0) {
+                snakeSpeedX = -snakeSize;
+                snakeSpeedY = 0;
+            } else if (event.key === 'ArrowRight' && snakeSpeedX === 0) {
+                snakeSpeedX = snakeSize;
+                snakeSpeedY = 0;
+            }
+        }
+
+        function checkCollision(head) {
+            return snakeSegments.slice(1).some(segment => segment.x === head.x && segment.y === head.y);
+        }
+
+        function gameOver() {
+            gameRunning = false;
+            alert('Game Over! Please try again.');
+            window.location.href = 'index.html'; // Redirect to start over
+        }
+
+        startGame();
+    </script>
+</body>
+</html>
