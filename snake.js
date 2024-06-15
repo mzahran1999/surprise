@@ -117,12 +117,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Create food at random position for Snake game
     function createSnakeFood() {
-        const maxX = canvasWidth - tileSize;
-        const maxY = canvasHeight - tileSize;
+        const maxX = (canvasWidth / tileSize) - 1;
+        const maxY = (canvasHeight / tileSize) - 1;
         food = {
-            x: Math.floor(Math.random() * (maxX / tileSize)) * tileSize,
-            y: Math.floor(Math.random() * (maxY / tileSize)) * tileSize
+            x: Math.floor(Math.random() * maxX) * tileSize,
+            y: Math.floor(Math.random() * maxY) * tileSize
         };
+    }
+
+    // Draw food on canvas for Snake game
+    function drawSnakeFood() {
+        snakeCtx.fillStyle = '#ff6347'; // Food color
+        snakeCtx.fillRect(food.x, food.y, tileSize, tileSize);
     }
 
     // Check if snake collides with itself or walls for Snake game
