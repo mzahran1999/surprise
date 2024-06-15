@@ -11,6 +11,9 @@
             display: block; /* Ensure canvas is block-level element */
             margin: 0 auto; /* Center the canvas */
         }
+        #pongGame {
+            display: none; /* Hide Pong game by default */
+        }
         #surprise {
             display: none; /* Hide surprise message by default */
             font-size: 24px;
@@ -27,13 +30,25 @@
     <button id="startSnakeGame">Start Snake Game</button>
     <button id="resetSnakeGame" style="display: none;">Reset Snake Game</button>
 
-    <div id="pongGame" style="display: none;">
+    <div id="pongGame">
         <!-- Pong game content will go here -->
     </div>
 
     <div id="surprise">
         <p>Will you go to the DPR Ian concert with me? ❤️</p>
     </div>
+
+    <script src="snake.js"></script>
+    <script src="pong.js"></script>
+    <script>
+        // JavaScript code for handling the surprise message display
+        function displaySurpriseMessage() {
+            const surpriseDiv = document.getElementById('surprise');
+            surpriseDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
 
     <script src="snake.js"></script>
     <script src="pong.js"></script>
