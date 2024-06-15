@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const startSnakeGameButton = document.getElementById('startSnakeGame');
+    const resetSnakeGameButton = document.getElementById('resetSnakeGame');
     const snakeCanvas = document.getElementById('snakeCanvas');
     const snakeCtx = snakeCanvas.getContext('2d');
 
@@ -13,9 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let dy = 0;
     let snakeInterval;
     let snakeGameOver = true;
+    let foodEaten = 0; // Track number of food eaten
 
     // Start the Snake game
     startSnakeGameButton.addEventListener('click', startSnakeGame);
+
+    // Reset the Snake game
+    resetSnakeGameButton.addEventListener('click', startSnakeGame);
 
     function startSnakeGame() {
         snake = [];
@@ -26,11 +31,14 @@ document.addEventListener('DOMContentLoaded', function() {
         dx = tileSize;
         dy = 0;
         snakeGameOver = false;
+        foodEaten = 0; // Reset food eaten count
 
         if (snakeInterval) {
             clearInterval(snakeInterval);
         }
         snakeInterval = setInterval(moveSnake, 150); // Adjust speed as needed
+
+        resetSnakeGameButton.style.display = 'none'; // Hide reset button
     }
 
     // Handle keyboard controls for Snake game
@@ -67,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (head.x < 0 || head.x >= canvasWidth || head.y < 0 || head.y >= canvasHeight || checkSnakeCollision(head)) {
             clearInterval(snakeInterval);
             snakeGameOver = true;
-            startPongGame(); // Start Pong game after Snake game
+            resetSnakeGameButton.style.display = 'inline'; // Show reset button
             return;
         }
 
@@ -75,7 +83,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Check if snake eats food
         if (head.x === food.x && head.y === food.y) {
+            foodEaten++;
             createSnakeFood();
+
+            // Check if snake has eaten 5 pieces of food
+            if (foodEaten === 5) {
+                clearInterval(snakeInterval);
+                snakeGameOver = true;
+                startPongGame(); // Start Pong game after Snake game
+                return;
+            }
         } else {
             snake.pop();
         }
