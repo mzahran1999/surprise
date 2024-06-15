@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Hockey Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            display: block;
+            margin: auto;
+            margin-top: 50px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="airHockeyCanvas" width="800" height="400"></canvas>
+    <script>
+        // Air Hockey game logic here
+        const airHockeyCanvas = document.getElementById('airHockeyCanvas');
+        const airHockeyCtx = airHockeyCanvas.getContext('2d');
+
+        const paddleWidth = 100;
+        const paddleHeight = 20;
+        const paddleSpeed = 10;
+        const puckRadius = 10;
+        let player1X = airHockeyCanvas.width / 2 - paddleWidth / 2;
+        let player2X = airHockeyCanvas.width / 2 - paddleWidth / 2;
+        let playerY = airHockeyCanvas.height - 40;
+        let puckX = airHockeyCanvas.width / 2;
+        let puckY = airHockeyCanvas.height / 2;
+        let puckSpeedX = 5;
+        let puckSpeedY = 5;
+        let player1Score = 0;
+        let player2Score = 0;
+        const winningScore = 5;
+        let gameOver = false;
+
+        function drawAirHockeyGame() {
+            if (gameOver) return;
+
+            // Clear canvas
+            airHockeyCtx.clearRect(0, 0, airHockeyCanvas.width, airHockeyCanvas.height);
+
+            // Draw paddles
+            airHockeyCtx.fillStyle = 'black';
+            airHockeyCtx.fillRect(player1X, playerY, paddleWidth, paddleHeight);
+            airHockeyCtx.fillRect(player2X, 20, paddleWidth, paddleHeight);
+
+            // Draw puck
+            airHockeyCtx.beginPath();
+            airHockeyCtx.arc(puckX, puckY, puckRadius, 0, Math.PI * 2);
+            airHockeyCtx.fillStyle = 'black';
+            airHockeyCtx.fill();
+            airHockeyCtx.closePath();
+
+            // Move puck
+            puckX += puckSpeedX;
+            puckY += puckSpeedY;
+
+            // Puck collision with walls
+            if (puckX - puckRadius < 0 || puckX + puckRadius > airHockeyCanvas.width) {
+                puckSpeedX = -puckSpeedX;
+            }
+            if (puckY - puckRadius < 0) {
+                puckSpeedY = -puckSpeedY;
+            }
+            if (puckY + puckRadius > airHockeyCanvas.height) {
+                resetPuck();
+                player2Score++;
+            }
+
+            // Puck collision with paddles
+            if (puckY + puckRadius > playerY && puckX > player1X && puckX < player1X + paddleWidth) {
+                puckSpeedY = -puckSpeedY;
+            }
+            if (puckY - puckRadius < paddleHeight && puckX > player2X && puckX < player2X + paddleWidth) {
+                puckSpeedY = -puckSpeedY;
+            }
+
+            // Draw scores
+            airHockeyCtx.fillText(`Player 1: ${player1Score}`, 100, 100);
+            airHockeyCtx.fillText(`Player 2: ${player2Score}`, airHockeyCanvas.width - 200, 100);
+
+            // Check for game over
+            if (player1Score >= winningScore || player2Score >= winningScore) {
+                gameOver = true;
+                setTimeout(() => {
+                    window.location.href = 'message.html'; // Redirect to message page after game
+                }, 1000); // Delay before redirecting
+            } else {
+                requestAnimationFrame(drawAirHockeyGame);
+            }
+        }
+
+        function resetPuck() {
+            puckX = airHockeyCanvas.width / 2;
+            puckY = airHockeyCanvas.height / 2;
+            puckSpeedX = 5; // Reset puck speed
+            puckSpeedY = 5;
+        }
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'ArrowLeft' && player1X > 0) {
+                player1X -= paddleSpeed;
+            } else if (event.key === 'ArrowRight' && player1X < airHockeyCanvas.width - paddleWidth) {
+                player1X += paddleSpeed;
+            }
+        });
+
+        drawAirHockeyGame();
+    </script>
+</body>
+</html>
