@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const ctx = gameCanvas.getContext('2d');
 
     const tileSize = 20;
+    const initialSnakeLength = 3; // Initial length of the snake
     let snake;
     let food;
     let gameInterval;
@@ -17,7 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
     startGameButton.addEventListener('click', startGame);
 
     function startGame() {
-        snake = [{ x: 200, y: 200 }];
+        snake = [];
+        for (let i = initialSnakeLength - 1; i >= 0; i--) {
+            snake.push({ x: tileSize * i, y: 0 });
+        }
         createFood();
         dx = tileSize;
         dy = 0;
@@ -83,8 +87,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Draw snake on canvas
     function drawSnake() {
-        snake.forEach(segment => {
-            ctx.fillStyle = '#007bff';
+        snake.forEach((segment, index) => {
+            ctx.fillStyle = index === 0 ? '#007bff' : '#1a73e8'; // Head and body color
             ctx.fillRect(segment.x, segment.y, tileSize, tileSize);
         });
     }
