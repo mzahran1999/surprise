@@ -6,3 +6,4 @@ document.addEventListener('DOMContentLoaded', function() {
     startSnakeGameButton.addEventListener('click', function() {
         const snakeGameSection = document.getElementById('snake-game');
         snakeGameSection
+//sss
